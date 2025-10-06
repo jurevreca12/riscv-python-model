@@ -204,7 +204,7 @@ class InstructionSRLI(InstructionISType):
 class InstructionSRAI(InstructionISType):
     def execute(self, model: Model):
         def sra(val, n): 
-            return val>>n if val >= model.state.intreg[0] else (val+0x100000000)>>n
+            return val>>n if val.value >= 0 else (val+0x100000000)>>n
         model.state.intreg[self.rd] = sra(model.state.intreg[self.rs1], self.shamt)
 
 
