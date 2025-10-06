@@ -181,6 +181,9 @@ class Register(object):
     def __cmp__(self, other):
         return self.bits != other.bits or self.value != other.value
 
+    def __eq__(self, other):
+        return self.__cmp__(self, other)
+
     def __and__(self, other):
         new = Register(self.bits)
         if isinstance(other, int):
