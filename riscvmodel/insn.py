@@ -236,12 +236,12 @@ class InstructionSLT(InstructionRType):
 
 @isa("sltu", RV32I, opcode=0b0110011, funct3=0b011, funct7=0b0000000)
 class InstructionSLTU(InstructionRType):
-    def execute(self, state: State):
-        if state.intreg[self.rs1].unsigned() < state.intreg[
+    def execute(self, model: Model):
+        if model.state.intreg[self.rs1].unsigned() < state.intreg[
                 self.rs2].unsigned():
-            state.intreg[self.rd] = 1
+            model.state.intreg[self.rd] = 1
         else:
-            state.intreg[self.rd] = 0
+            model.state.intreg[self.rd] = 0
 
 
 @isa("xor", RV32I, opcode=0b0110011, funct3=0b100, funct7=0b0000000)
