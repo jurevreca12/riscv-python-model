@@ -209,7 +209,7 @@ class InstructionSRAI(InstructionISType):
             for i in range(n.unsigned()):
                 res = res >> 1
                 res = res | s
-            return sra        
+            return res
         model.state.intreg[self.rd] = sra(model.state.intreg[self.rs1], self.shamt)
 
 
