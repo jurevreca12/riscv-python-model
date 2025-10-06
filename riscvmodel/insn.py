@@ -206,7 +206,7 @@ class InstructionSRAI(InstructionISType):
         def sra(val, n):
             res = val
             s = val & 0x80000000
-            for i in range(n):
+            for i in range(n.shamt.unsigned()):
                 res = res >> 1
                 res = res | s
             return sra        
