@@ -133,7 +133,7 @@ class Model(object):
     def __init__(self, variant: Variant = None, *, environment: Environment = None, state: State = None, verbose = False, asm_width=20):
         assert variant is None or state is None, "Please specify either the state or variant, but not both."
         self.state = state if state is not None else State(variant)
-        self.environment = environment if environment is not None else Environment()
+        self.environment = environment if environment is not None else Environment(bootaddr=0)
         self.verbose = verbose
         if self.verbose is not False:
             self.verbose_file = sys.stdout if verbose is True else open(self.verbose, "w")
