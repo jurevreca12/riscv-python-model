@@ -17,13 +17,13 @@ class TerminateException(Exception):
 class State(object):
     single_regs = []
 
-    def __init__(self, variant: Variant):
+    def __init__(self, variant: Variant, memory = None, bootaddr = 0):
         self.variant = variant
         intregs = 32 if variant.baseint == "I" else 16
         self.intreg = RegisterFile(intregs, 32, {0: 0x0})
-        self.pc = Register(32)
-        self.pc_update = Register(32)
-        self.memory = Memory()
+        self.pc = Register(32, value = bootaddr)
+        self.pc_update = Register(32, value = bootaddr)
+        self.memory = memory if memory is not None else Memory()
         self.initialized = True
         # Used for tracking atomic accesses
         self.reservations = []

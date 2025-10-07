@@ -134,10 +134,10 @@ class Immediate(object):
 
 
 class Register(object):
-    def __init__(self, bits: int):
+    def __init__(self, bits: int, value = 0):
         self.bits = bits
         self.immutable = False
-        self.value = 0
+        self.value = value
         self.format = "{{:0{}x}}".format(int(bits/4))
         self.mask = (1 << bits) - 1
 
