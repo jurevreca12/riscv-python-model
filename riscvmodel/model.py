@@ -1,4 +1,5 @@
 from random import randrange
+from dataclasses import dataclass
 import sys
 
 from .variant import *
@@ -122,7 +123,9 @@ class Memory(object):
 
         self.memory_updates = []
 
+@dataclass
 class Environment:
+    bootaddr: int
     def call(self, state: State):
         pass
 

@@ -5,10 +5,10 @@ import struct
 class Simulator:
   def __init__(self, model):
     self.model = model
-    self.program = []
+    self.program = {}
 
-  def load_program(self, program, *, address=0):
-    self.program = [i for i in program]
+  def load_program(self, program, *, baseaddr=0):
+    self.program = {(baseaddr + addr * 4): insn for insn, addr in enumerate(program)}
 
   def load_data(self, data = "", *, address=0):
     mem = self.model.state.memory.memory
@@ -20,7 +20,7 @@ class Simulator:
     cnt = 0
     while True:
       try:
-        self.model.issue(self.program[int(self.model.state.pc)>>2])
+        self.model.issue(self.program[int(self.model.state.pc)])
         cnt += 1
       except TerminateException as exc:
         assert exc.returncode == 0
