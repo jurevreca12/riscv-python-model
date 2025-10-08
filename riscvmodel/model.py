@@ -1,6 +1,6 @@
-from random import randrange
 from dataclasses import dataclass
 import sys
+import random
 
 from .variant import *
 from .types import Register, RegisterFile, TracePC, TraceIntegerRegister, TraceMemory
@@ -77,33 +77,41 @@ class Memory(object):
         self.memory_updates = []
 
     def lb(self, address):
-        word = address >> 2
-        offset = address % 4
-        if word not in self.memory:
-            self.memory[word] = randrange(0, 1 << 32)
-        return (self.memory[word] >> (offset*8)) & 0xff
+        if address not in self.memory:
+            self.memory[address] = random.randint(0, (1 << 8) - 1)
+        return self.memory[address]
 
     def lh(self, address):
-        word = address >> 2
-        offset = (address >> 1) % 2
-        if word not in self.memory:
-            self.memory[word] = randrange(0, 1 << 32)
-        return (self.memory[word] >> (offset*16)) & 0xffff
+        if address not in self.memory:
+            self.memory[address] = random.randint(0, (1 << 8) - 1)
+        if address + 1 not in self.memory:
+            self.memory[address + 1] = random.randint(0, (1 << 8) - 1)
+        return (self.memory[address + 1]  << 8) + self.memory[address]
 
     def lw(self, address):
-        word = address >> 2
-        if word not in self.memory:
-            self.memory[word] = randrange(0, 1 << 32)
-        return self.memory[word]
+        for addr in range(address, address + 4):
+            if addr not in self.memory:
+                self.memory[addr] = random.randint(0, (1 << 8) - 1)
+        return (self.memory[address + 3] << 24 +
+                self.memory[address + 2] << 16 +
+                self.memory[address + 1] << 8  +
+                self.memory[address])
 
     def sb(self, address, data):
-        self.memory_updates.append(TraceMemory(TraceMemory.GRANULARITY.BYTE, address, int(data) & 0xFF))
+        assert data == data & 0xFF, f"Data {data} is out of bounds."
+        self.memory[address] = data
 
     def sh(self, address, data):
-        self.memory_updates.append(TraceMemory(TraceMemory.GRANULARITY.HALFWORD, address, int(data) & 0xFFFF))
+        assert data == data & 0xFFFF, f"Data {data} is out of bounds."
+        self.memory[address]      = data & 0xFF
+        self.memory[address + 1 ] = (data & 0xFF00) >> 8
 
     def sw(self, address, data):
-        self.memory_updates.append(TraceMemory(TraceMemory.GRANULARITY.WORD, address, int(data) & 0xFFFFFFFF))
+        assert data == data & 0xFFFFFFFF, f"Data {data} is out of bounds."
+        self.memory[address]     =  data & 0xFF
+        self.memory[address + 1] = (data & 0xFF00)     >> 8
+        self.memory[address + 2] = (data & 0xFF0000)   >> 16
+        self.memory[address + 3] = (data & 0xFF000000) >> 24
 
     def changes(self):
         return self.memory_updates
