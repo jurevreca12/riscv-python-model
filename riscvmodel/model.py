@@ -80,7 +80,7 @@ class Memory(object):
         ret = val
         sign_bit = 1 << (bits - 1)
         if val & sign_bit > 0:
-            mask = 0xFFFFFFFF & ((2**bits) - 1)
+            mask = 0xFFFFFFFF ^ ((2**bits) - 1)
             ret = val | mask
         return ret
 
