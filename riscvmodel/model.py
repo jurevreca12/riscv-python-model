@@ -76,17 +76,25 @@ class Memory(object):
         self.memory = {}
         self.memory_updates = []
 
+    def sign_extend(val: int, bits int) -> int:
+        ret = val
+        sign_bit = 1 << (bits - 1)
+        if val & sign_bit > 0:
+            mask = 0xFFFFFFFF & ((2**bits) - 1)
+            ret = val | mask
+        return ret
+
     def lb(self, address):
         if address not in self.memory:
             self.memory[address] = random.randint(0, (1 << 8) - 1)
-        return self.memory[address]
+        return self.sign_extend(self.memory[address], bits=8)
 
     def lh(self, address):
         if address not in self.memory:
             self.memory[address] = random.randint(0, (1 << 8) - 1)
         if address + 1 not in self.memory:
             self.memory[address + 1] = random.randint(0, (1 << 8) - 1)
-        return (self.memory[address + 1]  << 8) + self.memory[address]
+        return self.sign_extend((self.memory[address + 1]  << 8) + self.memory[address], bits=16)
 
     def lw(self, address):
         for addr in range(address, address + 4):
@@ -99,20 +107,20 @@ class Memory(object):
 
     def sb(self, address, data):
         lowbyte = data & 0x000000FF
-        self.memory[address] = lowbyte
+        self.memory[address] = lowbyte.value
 
     def sh(self, address, data):
         lowbyte = data & 0x000000FF
         sndbyte = data & 0x0000FF00
-        self.memory[address]      = lowbyte
-        self.memory[address + 1 ] = sndbyte >> 8
+        self.memory[address]      = lowbyte.value
+        self.memory[address + 1 ] = (sndbyte >> 8).value
 
     def sw(self, address, data):
         assert data == data & 0xFFFFFFFF, f"Data {data} is out of bounds."
-        self.memory[address]     =  data & 0xFF
-        self.memory[address + 1] = (data & 0xFF00)     >> 8
-        self.memory[address + 2] = (data & 0xFF0000)   >> 16
-        self.memory[address + 3] = (data & 0xFF000000) >> 24
+        self.memory[address]     = (data & 0xFF).value
+        self.memory[address + 1] = ((data & 0xFF00)     >> 8).value
+        self.memory[address + 2] = ((data & 0xFF0000)   >> 16).value
+        self.memory[address + 3] = ((data & 0xFF000000) >> 24).value
 
     def changes(self):
         return self.memory_updates
