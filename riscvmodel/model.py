@@ -98,13 +98,14 @@ class Memory(object):
                 self.memory[address])
 
     def sb(self, address, data):
-        assert data == data & 0xFF, f"Data {data} is out of bounds."
-        self.memory[address] = data
+        lowbyte = data & 0x000000FF
+        self.memory[address] = lowbyte
 
     def sh(self, address, data):
-        assert data == data & 0xFFFF, f"Data {data} is out of bounds."
-        self.memory[address]      = data & 0xFF
-        self.memory[address + 1 ] = (data & 0xFF00) >> 8
+        lowbyte = data & 0x000000FF
+        sndbyte = data & 0x0000FF00
+        self.memory[address]      = lowbyte
+        self.memory[address + 1 ] = sndbyte >> 8
 
     def sw(self, address, data):
         assert data == data & 0xFFFFFFFF, f"Data {data} is out of bounds."
