@@ -76,7 +76,7 @@ class Memory(object):
         self.memory = {}
         self.memory_updates = []
 
-    def sign_extend(val: int, bits int) -> int:
+    def sign_extend(val: int, bits: int) -> int:
         ret = val
         sign_bit = 1 << (bits - 1)
         if val & sign_bit > 0:
