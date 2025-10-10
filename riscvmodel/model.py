@@ -116,7 +116,6 @@ class Memory(object):
         self.memory[address + 1 ] = (sndbyte >> 8)
 
     def sw(self, address, data):
-        assert data.value == data.value & 0xFFFFFFFF, f"Data {data} is out of bounds."
         self.memory[address]     = (data.value & 0xFF)
         self.memory[address + 1] = ((data.value & 0xFF00)     >> 8)
         self.memory[address + 2] = ((data.value & 0xFF0000)   >> 16)
