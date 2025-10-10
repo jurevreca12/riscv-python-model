@@ -106,21 +106,21 @@ class Memory(object):
                 self.memory[address])
 
     def sb(self, address, data):
-        lowbyte = data & 0x000000FF
-        self.memory[address] = lowbyte.value
+        lowbyte = data.value & 0x000000FF
+        self.memory[address] = lowbyte
 
     def sh(self, address, data):
-        lowbyte = data & 0x000000FF
-        sndbyte = data & 0x0000FF00
-        self.memory[address]      = lowbyte.value
-        self.memory[address + 1 ] = (sndbyte >> 8).value
+        lowbyte = data.value & 0x000000FF
+        sndbyte = data.value & 0x0000FF00
+        self.memory[address]      = lowbyte
+        self.memory[address + 1 ] = (sndbyte >> 8)
 
     def sw(self, address, data):
-        assert data == data & 0xFFFFFFFF, f"Data {data} is out of bounds."
-        self.memory[address]     = (data & 0xFF).value
-        self.memory[address + 1] = ((data & 0xFF00)     >> 8).value
-        self.memory[address + 2] = ((data & 0xFF0000)   >> 16).value
-        self.memory[address + 3] = ((data & 0xFF000000) >> 24).value
+        assert data.value == data.value & 0xFFFFFFFF, f"Data {data} is out of bounds."
+        self.memory[address]     = (data.value & 0xFF)
+        self.memory[address + 1] = ((data.value & 0xFF00)     >> 8)
+        self.memory[address + 2] = ((data.value & 0xFF0000)   >> 16)
+        self.memory[address + 3] = ((data.value & 0xFF000000) >> 24)
 
     def changes(self):
         return self.memory_updates
