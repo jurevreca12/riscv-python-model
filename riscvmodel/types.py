@@ -182,7 +182,7 @@ class Register(object):
         return self.bits != other.bits or self.value != other.value
 
     def __eq__(self, other):
-        return self.__cmp__(self, other)
+        return self.__cmp__(other)
 
     def __and__(self, other):
         new = Register(self.bits)
