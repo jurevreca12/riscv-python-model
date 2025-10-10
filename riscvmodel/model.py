@@ -100,10 +100,10 @@ class Memory(object):
         for addr in range(address, address + 4):
             if addr not in self.memory:
                 self.memory[addr] = random.randint(0, (1 << 8) - 1)
-        return (self.memory[address + 3] << 24 +
-                self.memory[address + 2] << 16 +
-                self.memory[address + 1] << 8  +
-                self.memory[address])
+        return ((self.memory[address + 3] << 24) +
+                (self.memory[address + 2] << 16) +
+                (self.memory[address + 1] << 8)  +
+                 self.memory[address])
 
     def sb(self, address, data):
         lowbyte = data.value & 0x000000FF
