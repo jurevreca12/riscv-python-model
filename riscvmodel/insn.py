@@ -88,7 +88,7 @@ class InstructionBGEU(InstructionBType):
 @isa("lb", RV32I, opcode=0b0000011, funct3=0b000)
 class InstructionLB(InstructionILType):
     def execute(self, model: Model):
-        data = model.state.memory.lb((model.state.intreg[self.rs1] + self.imm).unsigned())
+        data = model.state.memory.lb((model.state.intreg[self.rs1] + self.imm).unsigned(), signex=True)
         if (data >> 7) & 0x1:
             data |= 0xFFFFFF00
         model.state.intreg[self.rd] = data
@@ -97,7 +97,7 @@ class InstructionLB(InstructionILType):
 @isa("lh", RV32I, opcode=0b0000011, funct3=0b001)
 class InstructionLH(InstructionILType):
     def execute(self, model: Model):
-        data = model.state.memory.lh((model.state.intreg[self.rs1] + self.imm).unsigned())
+        data = model.state.memory.lh((model.state.intreg[self.rs1] + self.imm).unsigned(), signex=True)
         if (data >> 15) & 0x1:
             data |= 0xFFFF0000
         model.state.intreg[self.rd] = data

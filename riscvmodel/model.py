@@ -84,17 +84,19 @@ class Memory(object):
             ret = val | mask
         return ret
 
-    def lb(self, address):
+    def lb(self, address, signex=False):
         if address not in self.memory:
             self.memory[address] = random.randint(0, (1 << 8) - 1)
-        return self.sign_extend(self.memory[address], bits=8)
+        val = self.memory[address]
+        return self.sign_extend(val, bits=8) if signex else val
 
-    def lh(self, address):
+    def lh(self, address, signex=False):
         if address not in self.memory:
             self.memory[address] = random.randint(0, (1 << 8) - 1)
         if address + 1 not in self.memory:
             self.memory[address + 1] = random.randint(0, (1 << 8) - 1)
-        return self.sign_extend((self.memory[address + 1]  << 8) + self.memory[address], bits=16)
+        val = (self.memory[address + 1]  << 8) + self.memory[address]
+        return self.sign_extend(val, bits=16) if signex else val
 
     def lw(self, address):
         for addr in range(address, address + 4):
